@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#edf1fa;background:#090d18;font-synthesis:none;text-rendering:optimizeLegibility;font-smooth:always;font-optical-sizing:auto}
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.auth-layout{min-height:100vh;display:grid;grid-template-columns:1.03fr .97fr;background:#0b1020}
+.brand-panel{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px 7.5%;background:radial-gradient(ellipse at 20% 80%,rgba(46,91,173,.28),transparent 48%),linear-gradient(145deg,#101a32 0%,#0b1224 55%,#101b34 100%);border-right:1px solid #202b43}
+.brand-lockup{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:700;letter-spacing:-.6px;z-index:1}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#91b9ff,#477ce0);color:#071326;display:grid;place-items:center;box-shadow:0 8px 24px #477ce044}
+.brand-accent{color:#8db5ff}
+.brand-copy{position:relative;z-index:1;max-width:540px;margin-top:-30px}
+.eyebrow{font-size:10px;letter-spacing:1.7px;font-weight:750;color:#8fa6c9;display:inline-flex;align-items:center;gap:9px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#79a8ff;box-shadow:0 0 13px #79a8ff}
+.brand-copy h1{font-size:clamp(46px,5.4vw,76px);letter-spacing:-4px;line-height:1.02;margin:25px 0 20px;font-weight:720}
+.brand-copy h1 span{color:#86adf5}
+.brand-copy p{font-size:16px;line-height:1.8;color:#a2b0c9;max-width:390px}
+.brand-footer{z-index:1;display:flex;gap:9px;align-items:center;color:#8798b5;font-size:12px}
+.orb{position:absolute;border:1px solid #8eb5ff18;border-radius:50%;pointer-events:none}.orb-one{width:470px;height:470px;right:-210px;bottom:-210px;box-shadow:0 0 0 50px #8eb5ff06,0 0 0 100px #8eb5ff04}.orb-two{width:210px;height:210px;right:8%;top:28%;background:radial-gradient(circle,#6f9ce91c,transparent 70%)}
+.form-panel{display:grid;place-items:center;padding:48px 7%}
+.form-wrap{width:min(100%,410px)}
+.form-heading{margin:0 0 28px}.form-heading h2{font-size:29px;letter-spacing:-1.1px;margin:13px 0 8px}.form-heading p,.muted{color:#8996ad;font-size:13px;line-height:1.7;margin:0}
+.tabs{display:flex;border-bottom:1px solid #263149;gap:26px;margin-bottom:25px}
+.tab{background:none;border:0;color:#77849c;padding:0 0 13px;font-size:13px;font-weight:650;position:relative}
+.tab.active{color:#dce7fb}.tab.active:after{content:"";height:2px;position:absolute;bottom:-1px;left:0;right:0;background:#82aaff;border-radius:2px}
+.auth-form{display:grid;gap:17px}.auth-form label{display:grid;gap:8px;font-size:12px;color:#b9c5d9;font-weight:600}
+.auth-form input{width:100%;height:47px;border:1px solid #29354d;background:#111a2b;border-radius:9px;padding:0 14px;color:#f1f5ff;outline:none;font-size:13px;transition:.2s}
+.auth-form input:focus{border-color:#739df0;box-shadow:0 0 0 3px #739df01c}.auth-form input::placeholder{color:#64728b}
+.primary-button{height:48px;border:0;border-radius:9px;background:linear-gradient(100deg,#8bb3ff,#6392ec);color:#08152c;font-weight:750;font-size:13px;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px;transition:.2s}
+.primary-button:hover{filter:brightness(1.08);transform:translateY(-1px)}.primary-button:disabled{opacity:.65;cursor:wait}
+.notice{margin-top:17px;padding:12px 14px;background:#14243b;border:1px solid #29466f;border-radius:9px;color:#b9d1fa;font-size:12px;line-height:1.6}
+.form-note{display:flex;gap:8px;align-items:center;color:#73839d;font-size:11px;line-height:1.5;margin-top:23px}
+.form-note svg{flex-shrink:0;color:#82aaff}.semester-note{border-top:1px solid #222e43;margin-top:34px;padding-top:20px;display:flex;align-items:center;gap:9px;color:#8392ac;font-size:11px}.semester-note svg{color:#86aef6}.semester-note span{color:#52617a}
+.mobile-brand{display:none}
+.center-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 20%,#172849 0%,#090d18 65%)}
+.waiting-card{width:min(100%,440px);padding:38px;border:1px solid #26344d;border-radius:18px;background:#101827;box-shadow:0 24px 80px #0005}
+.success-icon{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#1b3451;color:#8db5ff;margin-bottom:26px}
+.waiting-card h1{font-size:28px;letter-spacing:-1px;margin:13px 0}.waiting-card p{font-size:13px;color:#9aa8bd;line-height:1.8}
+.status-pill{display:inline-flex;align-items:center;gap:8px;background:#1d2a3d;color:#b5c9e9;padding:8px 12px;border-radius:99px;font-size:11px;text-transform:capitalize;margin:12px 0 20px}.status-pill span{width:6px;height:6px;border-radius:50%;background:#e6bd70}
+.secondary-button{background:#17243a;border:1px solid #30415d;color:#c8d5e9;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:650}
+.dashboard-shell{min-height:100vh;background:#0b1020}.topbar{height:72px;padding:0 6%;border-bottom:1px solid #202c42;display:flex;align-items:center;justify-content:space-between}.dashboard-content{max-width:1050px;margin:0 auto;padding:70px 28px}.dashboard-content h1{font-size:38px;letter-spacing:-1.5px;margin:18px 0 8px}.empty-state{margin-top:42px;border:1px dashed #34445e;border-radius:16px;padding:54px 25px;text-align:center;color:#8fb3f5;background:#111a2a}.empty-state h2{font-size:19px;color:#e4ebf8;margin:17px 0 8px}.empty-state p{font-size:13px;color:#8999b2;max-width:440px;margin:0 auto;line-height:1.7}
+.loader{width:34px;height:34px;border:3px solid #283752;border-top-color:#8bb3ff;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:800px){.auth-layout{grid-template-columns:1fr}.brand-panel{display:none}.form-panel{min-height:100vh;padding:35px 24px}.mobile-brand{display:flex;align-items:center;gap:10px;font-weight:750;margin-bottom:65px}.form-heading h2{font-size:26px}.dashboard-content{padding:48px 22px}.dashboard-content h1{font-size:31px}}
