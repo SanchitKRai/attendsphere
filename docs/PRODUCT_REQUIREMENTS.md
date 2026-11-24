@@ -1,79 +1,77 @@
 # AttendSphere — Product Requirements
 
-## Confirmed decisions
+## Confirmed product direction
 
 | Area | Decision |
 |---|---|
 | Institution context | B.Sc. Life Sciences, Semester IV |
 | Academic year | 2027 (planned; verify actual college dates before generating sessions) |
 | Subjects | 7 total: 3 core + SEC + VAC + AEC + GE/DSE |
-| Attendance warning | Below 70% |
+| Attendance warning | Below 70% default; student target is personal |
 | Admin model | One super-admin |
 | Student onboarding | Student submits registration; admin approves |
-| Timetable | Not available yet; configured manually later |
+| Timetable | Admin configures manually after official timetable is released |
+| Privacy model | Hybrid academic administration + private student attendance |
 
 ## Roles
 
 ### Student
-- Submit registration request.
-- Sign in only after approval.
-- View own dashboard and own attendance history.
-- View scheduled classes for the day.
-- Mark a scheduled class Present or Absent.
+- Submit registration request and sign in after admin approval.
+- Complete personal onboarding preferences (semester/subjects/target/timetable view) where supported.
+- View own dashboard, subjects, scheduled classes and attendance history.
+- Mark own scheduled class Present or Absent.
+- Correct/update own attendance entry through the validated attendance RPC.
 - Report a class cancellation; report is pending admin review.
-- View subject-wise and overall attendance.
+- View own subject-wise and overall attendance, analytics, prediction and exportable report.
+- Cannot read another student's attendance or personal analytics.
 
 ### Super-admin
 - View registration requests and approve/reject them.
-- Manage student accounts and subject catalogue.
-- Configure weekly timetable once released.
-- Configure academic dates, official holidays and vacations.
+- Manage student account status and academic configuration.
+- Manage subject catalogue, academic dates and recurring timetable.
 - Generate dated class sessions.
 - Cancel a class for the cohort.
-- Review student-reported cancellation requests.
-- Correct attendance with a required reason and audit entry.
-- View/filter cohort attendance and export CSV reports.
+- Review student-reported cancellation requests and record a decision.
+- View operational configuration and registration counts.
+- Must not view, search, export, correct or otherwise access individual attendance records, attendance percentages, student attendance histories or personal analytics.
 
 ## Attendance rules
 
 For a subject or reporting period:
 
-`attendance percentage = present sessions / (conducted sessions) * 100`
+`attendance percentage = present sessions / (present sessions + absent sessions) * 100`
 
 Where:
 - Present = attended conducted session.
 - Absent = missed conducted session.
 - Cancelled = admin-confirmed cancelled session, excluded from the denominator.
-- Pending = not yet marked; does not count as Present or Absent. The interface must show it clearly.
-- Pending cancellation requests do not change the session's attendance status or denominator.
+- Pending/unmarked = not yet marked; separately displayed and excluded from finalized percentage.
+- Pending cancellation requests do not change the session's status or denominator.
 - A confirmed cancellation is a property of the cohort session, not an individual student's absence.
 
-The precise denominator policy for pending/unmarked sessions must be reflected in reports. Recommended default: calculate percentage only over finalized Present + Absent sessions, while separately displaying unmarked scheduled sessions so the percentage cannot hide incomplete records.
-
 ## Scheduling principles
-
 - Timetable entries describe recurring weekday/time patterns.
 - Class sessions are dated instances generated from timetable entries.
-- Academic calendar exclusions must be configurable by the admin and based on confirmed college closures.
+- Academic calendar exclusions are configurable by the admin and based on confirmed college closures.
 - Restricted holidays must not automatically cancel classes.
 - Timetable changes must not rewrite past class sessions.
 - Avoid duplicate generated sessions for the same timetable entry and date.
+- Do not seed timetable or attendance examples as real data.
 
 ## Security requirements
-
 - Use Supabase Auth for identity.
 - Store role and approval state in a protected profile table.
 - Users cannot update their own role or approval state.
-- Admin authorization must be enforced by PostgreSQL Row Level Security (RLS), not only by hiding frontend routes.
-- Students can read and modify only their own attendance records, subject to session rules.
-- Students cannot modify a session-wide cancellation directly.
-- Admin-only mutations should be implemented with database policies and carefully scoped server-side functions where needed.
-- Audit attendance corrections and admin cancellation decisions.
+- Admin authorization is enforced by PostgreSQL RLS and trusted database functions.
+- Students can select only their own attendance rows.
+- Admins have no SELECT, INSERT, UPDATE or DELETE access to individual attendance rows.
+- Student attendance writes go through the validated `mark_my_attendance` RPC.
+- Admins can manage cohort sessions and cancellation requests without access to attendance records.
 - Never put a service-role key in the browser.
 
-## Out of scope for initial milestone
-
-- Automated attendance through GPS, face recognition or device tracking.
+## Out of scope
+- GPS, face recognition or device tracking.
 - Public student directory.
-- Automatic import of a timetable before it is supplied.
+- Automatic timetable import before it is supplied.
 - Fabricated sample student data presented as actual records.
+- Faculty access to personal attendance data or institution-wide student attendance reporting.
