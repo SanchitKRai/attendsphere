@@ -1,117 +1,42 @@
-# AttendSphere — Initial Architecture
+# AttendSphere — Architecture
 
-## High-level components
+## Components
+- React + Vite + TypeScript single-page application.
+- Supabase Auth for identity and session management.
+- PostgreSQL for academic configuration, dated sessions, personal attendance and audit history.
+- Row Level Security (RLS) as the authorization boundary.
+- Vercel for frontend hosting.
 
-- React SPA: student and admin experiences.
-- Supabase Auth: authentication and sessions.
-- PostgreSQL: academic configuration, timetable, dated sessions, attendance and audit history.
-- RLS: authorization boundary for all client-accessible tables.
-- Vercel: frontend hosting.
+## Roles and trust boundaries
 
-## Proposed data model
+### Super-admin
+Can manage registration approvals, subject catalogue, academic calendar, recurring timetable entries, dated class sessions and cohort-wide cancellations. Admin access does not include individual attendance rows or personal analytics.
 
-### profiles
-- id (UUID, primary key, references auth.users)
-- full_name
-- student_identifier (nullable until institution's preferred identifier is known)
-- role: student | admin
-- approval_status: pending | approved | rejected
-- created_at, updated_at
+### Student
+Can read academic configuration and cohort class sessions, and can read only their own attendance records. Attendance writes use the validated `mark_my_attendance` database function. A student cannot change another student's data or cancel a cohort session.
 
-Role and approval fields must be assigned/changed only by an authorized admin or a trusted database trigger/function.
+## Data model
+- `profiles`: Auth-linked identity, full name, role and approval status.
+- `subjects`: subject code, name, category, semester and active status.
+- `timetable_entries`: recurring weekday/time patterns and effective dates.
+- `academic_calendar_events`: teaching days, holidays, vacations, exams and exclusions.
+- `class_sessions`: dated instances generated from timetable entries; cancellation is cohort-wide.
+- `attendance_records`: one Present/Absent row per student and dated session.
+- `cancellation_requests`: student-submitted reports reviewed by admin.
+- `audit_logs`: administrative actions and reasons.
 
-### subjects
-- id
-- code (optional)
-- name
-- category: CORE | SEC | VAC | AEC | GE_DSE
-- semester_number
-- is_active
-- created_at, updated_at
+## Attendance privacy
+RLS on `attendance_records` permits SELECT only when `student_id = auth.uid()` and the caller is an approved student. Admin policies and direct write grants are removed. The browser can write attendance only by calling the narrowly scoped SECURITY DEFINER `mark_my_attendance` function, which validates the approved student's identity and scheduled session.
 
-There should be exactly seven active subject slots for the initial Semester IV configuration once all four additional subject names are supplied. Names for SEC, VAC, AEC and GE/DSE are not yet known.
+Admin cancellation review operates on `class_sessions` and `cancellation_requests`; it must not query or expose attendance rows.
 
-### timetable_entries
-- id
-- subject_id
-- weekday (1–7)
-- start_time
-- end_time
-- class_type: theory | practical | tutorial | other
-- venue (nullable)
-- effective_from
-- effective_until (nullable)
-- is_active
-- created_by, created_at, updated_at
+## Scheduling and calculations
+A weekly timetable entry is a template, not proof that a class occurred. Generate dated class sessions using the confirmed academic calendar. Historical sessions remain stable if future timetable entries change. Calculate a student's finalized percentage from their own Present and Absent rows; display unmarked scheduled sessions separately. Exclude admin-confirmed cancelled sessions from the denominator.
 
-No actual entries should be seeded before the timetable is received.
-
-### academic_calendar_events
-- id
-- title
-- event_type: teaching_day | vacation | college_holiday | exam | preparation_leave | other
-- start_date
-- end_date
-- excludes_classes (boolean)
-- notes
-- created_by, created_at, updated_at
-
-Calendar dates supplied in initial discussions are provisional until the official applicable semester calendar is confirmed.
-
-### class_sessions
-- id
-- timetable_entry_id (nullable for one-off sessions)
-- subject_id
-- session_date
-- start_time
-- end_time
-- class_type
-- status: scheduled | cancelled
-- cancellation_reason (nullable)
-- cancellation_confirmed_by (nullable)
-- cancellation_confirmed_at (nullable)
-- created_at, updated_at
-
-Add a uniqueness constraint preventing duplicate generated sessions for the same timetable entry and date.
-
-### attendance_records
-- id
-- class_session_id
-- student_id
-- status: present | absent
-- marked_at
-- updated_at
-- updated_by
-- unique(class_session_id, student_id)
-
-Cancelled is stored on the cohort-wide class_session, not duplicated as per-student attendance.
-
-### cancellation_requests
-- id
-- class_session_id
-- requested_by
-- reason
-- status: pending | approved | rejected
-- reviewed_by (nullable)
-- reviewed_at (nullable)
-- review_note (nullable)
-- created_at
-
-### audit_logs
-- id
-- actor_id
-- action
-- entity_type
-- entity_id
-- before_data (JSONB)
-- after_data (JSONB)
-- reason
-- created_at
-
-## Important implementation notes
-
-1. A student registration request must not create an approved student identity by trusting client-supplied role values.
-2. An initial safe implementation can require admin-created invite/approval flow. If open sign-up is enabled, new profiles must default to role=student and approval_status=pending via a trusted trigger; clients must not be able to override those fields.
-3. Attendance percentage queries should exclude cancelled sessions and distinguish finalized records from pending/unmarked sessions.
-4. Historical class sessions must remain stable if timetable entries are edited later.
-5. The super-admin bootstrap procedure must be documented and must not rely on a public sign-up form granting admin access.
+## Security principles
+1. New Auth users are always pending students; never trust client metadata for role assignment.
+2. Never expose a Supabase service-role key in browser code.
+3. Enforce permissions in RLS/database functions, not only frontend route guards.
+4. Keep historical sessions stable.
+5. Do not generate fake attendance or timetable data.
+6. Keep student attendance private from admins and other students.
