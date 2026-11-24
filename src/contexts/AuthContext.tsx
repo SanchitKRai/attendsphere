@@ -28,7 +28,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshProfile = async () => {
     if (!supabase) return;
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError) {
+      console.error("Unable to verify current user:", authError.message);
+      setProfile(null);
+      return;
+    }
     if (!user) {
       setProfile(null);
       return;
