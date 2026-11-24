@@ -103,3 +103,20 @@ button{cursor:pointer}
 .loading-line{font-size:10px;color:#8b9ab0;margin-bottom:14px}.student-alert.error-notice{color:#ae5148;background:#fff2f0;border-color:#f3d8d4}
 @media(max-width:1000px){.student-app{grid-template-columns:210px minmax(0,1fr)}.student-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.student-columns{grid-template-columns:1fr}.subject-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.student-app{display:block}.student-sidebar{position:static;height:auto;min-height:0;padding:12px 14px;border-right:0;border-bottom:1px solid #e8edf4}.student-brand{padding:0 3px 12px}.sidebar-label,.sidebar-bottom{display:none}.student-nav{display:flex;overflow-x:auto;gap:4px;padding-bottom:2px}.student-nav button{white-space:nowrap;padding:9px;font-size:10px}.nav-glyph{display:none}.student-topbar{height:52px;padding:0 16px}.semester-chip{display:none}.student-content{padding:27px 15px 50px}.welcome-row{align-items:flex-start;flex-direction:column}.welcome-row h1{font-size:25px}.student-stats{gap:8px}.student-stats article{padding:13px;min-height:100px}.student-stats article strong{font-size:23px}.student-alert{align-items:flex-start;flex-direction:column}.subject-grid{grid-template-columns:1fr}.history-head,.history-row{grid-template-columns:1.2fr .8fr .8fr}.history-head span:nth-child(3),.history-row>span:nth-child(3){display:none}.student-panel{padding:14px}.attendance-actions button{padding:7px 6px}}
+
+
+/* Authentication follows the split-panel Figma treatment. */
+.auth-layout{background:#f7f8fb}
+.form-panel{background:#f7f8fb;color:#1b2940}
+.form-heading h2{color:#1c2b43}
+.form-heading p{color:#7d8ba0}
+.tabs{border-bottom-color:#e4e9f1}
+.tab{color:#8995a7}.tab.active{color:#2b3b55}.tab.active:after{background:#477fe1}
+.auth-form label{color:#52627a}
+.auth-form input{background:#fff;border-color:#dce3ed;color:#25354e}
+.auth-form input:focus{border-color:#6f98e5;box-shadow:0 0 0 3px #6f98e51c}
+.auth-form input::placeholder{color:#a0aabc}
+.form-note{color:#8290a3}.semester-note{border-top-color:#e5eaf1;color:#7e8ca1}
+.notice{background:#edf4ff;border-color:#d9e7fc;color:#42669f}
+.mobile-brand{color:#1b2940}
+@media(max-width:760px){.auth-layout{grid-template-columns:1fr}.brand-panel{min-height:250px;padding:24px 7%}.brand-copy{margin:20px 0 0}.brand-copy h1{font-size:42px;letter-spacing:-2px;margin:14px 0 10px}.brand-copy p{font-size:12px;line-height:1.6}.brand-footer{margin-top:25px}.orb-one{width:250px;height:250px}.form-panel{padding:34px 7%}.mobile-brand{display:flex;align-items:center;gap:8px;font-weight:750;margin-bottom:28px}.form-heading h2{font-size:25px}}
