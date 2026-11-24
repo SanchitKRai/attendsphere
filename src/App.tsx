@@ -216,7 +216,7 @@ function StudentDashboard() {
   const today = new Date().toISOString().slice(0,10);
   const todaySessions = sessions.filter(s=>s.session_date===today && s.status==="scheduled");
   const upcoming = sessions.filter(s=>s.session_date>=today && s.status==="scheduled").sort((a,b)=>a.session_date.localeCompare(b.session_date)||a.start_time.localeCompare(b.start_time)).slice(0,5);
-  const needs = percentage===null ? null : Math.max(0,Math.ceil((target*completed/100-present)/(1-target/100)));
+  const needs = percentage===null ? null : target===100 ? (absent===0?0:null) : Math.max(0,Math.ceil((target*completed/100-present)/(1-target/100)));
 
   async function mark(sessionId:string,status:"present"|"absent") {
     if(!supabase) return;
